@@ -1,19 +1,19 @@
 {
-  "name": "@liquity/lib-base",
+  "name": "@cashteddy/lib-base",
   "version": "0.0.0-semantic-release",
-  "description": "Liquity SDK shared interfaces",
+  "description": "Teddy Cash SDK shared interfaces",
   "keywords": [
-    "Liquity",
+    "TeddyCash",
     "protocol",
     "DeFi",
-    "Ethereum"
+    "Avalanche"
   ],
-  "homepage": "https://github.com/liquity/liquity#readme",
+  "homepage": "https://github.com/teddy-cash/dev#readme",
   "license": "MIT",
-  "author": "Daniel Simon <dani@liquity.org>",
+  "author": "Mr Hello <mrhelloforever@protonmail.com>",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "repository": "https://github.com/liquity/dev",
+  "repository": "https://github.com/teddy-cash/dev",
   "scripts": {
     "prepare": "run-s prepare:*",
     "prepare:eslint": "eslint src",
