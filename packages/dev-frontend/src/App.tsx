@@ -13,6 +13,7 @@ import theme from "./theme";
 import { DisposableWalletProvider } from "./testUtils/DisposableWalletProvider";
 import { LiquityFrontend } from "./LiquityFrontend";
 
+console.log(`BWB theme is ${theme.config!.initialColorModeName}`);
 if (window.ethereum) {
   // Silence MetaMask warning in console
   Object.assign(window.ethereum, { autoRefreshOnNetworkChange: false });
@@ -56,9 +57,7 @@ const UnsupportedMainnetFallback: React.FC = () => (
       <Icon name="exclamation-triangle" /> This app is for testing purposes only.
     </Heading>
 
-    <Paragraph sx={{ mb: 3 }}>
-      Please change your network to Avalanche C-Chain.
-    </Paragraph>
+    <Paragraph sx={{ mb: 3 }}>Please change your network to Avalanche C-Chain.</Paragraph>
 
     <Paragraph>
       If you'd like to use Teddy Cash on mainnet, please pick a frontend{" "}
