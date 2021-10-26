@@ -57,12 +57,12 @@ const UnsupportedMainnetFallback: React.FC = () => (
     </Heading>
 
     <Paragraph sx={{ mb: 3 }}>
-      Please change your network to Avalanche C-Chain.
+      Please change your network to Harmony Mainnet.
     </Paragraph>
 
     <Paragraph>
-      If you'd like to use Teddy Cash on mainnet, please pick a frontend{" "}
-      <Link href="https://app.teddy.cash">
+      If you'd like to use Extra Long on mainnet, please pick a frontend{" "}
+      <Link href="https://app.extralong.one">
         here <Icon name="external-link-alt" size="xs" />
       </Link>
       .
@@ -89,9 +89,9 @@ const App = () => {
       }}
     >
       <Heading sx={{ mb: 3 }}>
-        <Icon name="exclamation-triangle" /> Teddy Cash is not yet deployed to this network
+        <Icon name="exclamation-triangle" /> Extra Long is not yet deployed to this network
       </Heading>
-      Please switch to Avalanche C-Chain.
+      Please switch to Harmony Mainnet.
     </Flex>
   );
 

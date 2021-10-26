@@ -16,7 +16,7 @@ type TokenRowProps = {
 
 export const TokenRow: React.FC<TokenRowProps> = ({ name, image, addToken, tooltip, children }) => {
   // awful CSS hack
-  const marginLeft = name === 'TSD' ? "20px" : "0px";
+  const marginLeft = name === 'XLSD' ? "20px" : "0px";
 
   return (
     <Flex sx={{ paddingBottom: "4px", borderBottom: 1, borderColor: "rgba(0, 0, 0, 0.1)", mb: 1 }}>
@@ -52,24 +52,24 @@ export const TokenStats: React.FC = () => {
       .catch((error: Error) => setLog([...log, `Error: ${error.message}`]));
   }
 
-  const addTsdToken = () => {
+  const addXlsdToken = () => {
     addToken({
       type: 'ERC20',
       options: {
         address: addresses['lusdToken'],
-        symbol: 'TSD',
+        symbol: 'XLSD',
         decimals: 18,
         image: 'https://assets.coingecko.com/coins/images/18303/small/logo_-_2021-09-13T111436.680.png'
       }
     });
   }
 
-  const addTeddyToken = () => {
+  const addXlongToken = () => {
     addToken({
       type: 'ERC20',
       options: {
         address: addresses['lqtyToken'],
-        symbol: 'TEDDY',
+        symbol: 'XLONG',
         decimals: 18,
         image: 'https://assets.coingecko.com/coins/images/18303/small/logo_-_2021-09-13T111436.680.png'
       }
@@ -86,7 +86,7 @@ export const TokenStats: React.FC = () => {
     }`;
 
     const fetchPrice = (address: string) => fetch(
-        "https://api.thegraph.com/subgraphs/name/dasconnor/pangolin-dex",
+        "https://graph.defikingdoms.com/subgraphs/name/defikingdoms/dex/graphql",
         {
         method: "POST",
         headers: {
@@ -109,19 +109,19 @@ export const TokenStats: React.FC = () => {
             const tokenData = token.name === 'lqty' ? 
               {
                 token: {
-                  derivedETH: '67.000000000000000000'
+                  derivedETH: '20.00000000000000000'
                 },
                 bundle: {
-                  ethPrice: '0.000432858000000000',
+                  ethPrice: '0.300000000000000000',
                 }
               }
             :
             {
               token: {
-                derivedETH: '67.000000000000000000'
+                derivedETH: '20.000000000000000000'
               },
                bundle: {
-                ethPrice: '0.015835300000000000',
+                ethPrice: '0.300000000000000000',
               }
             }
             return {isLoading: true, error: undefined,  data: tokenData}
@@ -144,18 +144,18 @@ export const TokenStats: React.FC = () => {
     return Decimal.from(d['token']['derivedETH']).mul(Decimal.from(d['bundle']['ethPrice']))
    }
 
-   const teddyValue = isLoading ? Decimal.from(0) : computeVal(data, error);
+   const xlongValue = isLoading ? Decimal.from(0) : computeVal(data, error);
    const tsdValue = tsdIsLoading ? Decimal.from(0) : computeVal(tsdData, tsdError);
    
-   const explorerUrl = chainId === 43114 ? "https://cchain.explorer.avax.network/address/" : "https://cchain.explorer.avax-test.network/address/"
+   const explorerUrl = chainId === 1666600000 ? "https://explorer.harmony.one/address/" : "https://explorer.testnet.harmony.one/address/"
 
    // hard-coded for current week. needs to be adapted to consume
    // circulating supply API feed.
    const circSupply = 5753340; 
-   const marketCapEstimate = teddyValue.mul(circSupply);
+   const marketCapEstimate = xlongValue.mul(circSupply);
    
    let tvlSP = lusdInStabilityPool;
-   let tvlTeddy = totalStakedLQTY.mul(teddyValue);
+   let tvlXlong = totalStakedLQTY.mul(xlongValue);
    
    let tvlTotal: Decimal = Decimal.from(0);
    let tvlCollateral: Decimal = Decimal.from(0);
@@ -177,12 +177,12 @@ export const TokenStats: React.FC = () => {
       const rewardsWeek = 32_000_000 * (shareNow -  Math.pow(ISSUANCE_FACTOR, timePassedInMinutes + 60*24*7));
       const rewardsYear = 32_000_000 * (shareNow - Math.pow(ISSUANCE_FACTOR, timePassedInMinutes + 60*24*365));
             
-      aprDaily = teddyValue.mul(rewardsDay).div(lusdInStabilityPool).mul(100);
-      aprWeekly = teddyValue.mul(rewardsWeek).div(lusdInStabilityPool).mul(100);
-      aprYearly = teddyValue.mul(rewardsYear).div(lusdInStabilityPool).mul(100);
+      aprDaily = xlongValue.mul(rewardsDay).div(lusdInStabilityPool).mul(100);
+      aprWeekly = xlongValue.mul(rewardsWeek).div(lusdInStabilityPool).mul(100);
+      aprYearly = xlongValue.mul(rewardsYear).div(lusdInStabilityPool).mul(100);
 
       tvlCollateral = total.collateral.mul(price)
-      tvlTotal = tvlTeddy
+      tvlTotal = tvlXlong
         .add(tvlSP)
         .add(tvlCollateral);
     } 
@@ -190,7 +190,7 @@ export const TokenStats: React.FC = () => {
     // this function is a hack to make the UI readable in testnet where the APR is super high
     const prettifyDecimal = (dec: Decimal, precision: number) => {
       const prettyVal = dec.prettify(precision)
-      // on the testnet, if no TSD in stability pool, this number is close to infinite
+      // on the testnet, if no XLSD in stability pool, this number is close to infinite
       if (prettyVal.length > 10) {
         return '\u221E';
       } else {
@@ -200,17 +200,14 @@ export const TokenStats: React.FC = () => {
 
     return (
         <>
-         <Heading>Teddy Cash Stats</Heading>
-         <TokenRow name="AVAX" image="./icons/avalanche-avax-logo.svg">
+         <Heading>Extra Long Stats</Heading>
+         <TokenRow name="ONE" image="./icons/avalanche-avax-logo.svg">
              <Flex sx={{minWidth: '55px', justifyContent: 'right', paddingRight: '2px'}}>${Decimal.from(price).toString(2)}</Flex>
-             <Link href="https://www.coingecko.com/en/coins/avalanche" target="_blank">
+             <Link href="https://www.coingecko.com/en/coins/harmony" target="_blank">
                 <Icon name="info-circle" style={{marginLeft: "4px"}} size="xs" />
              </Link>
-             <Link href="https://data.chain.link/avalanche/mainnet/crypto-usd/avax-usd" target="_blank">
-                <Icon name="satellite-dish" style={{marginLeft: "4px"}} size="xs" />
-            </Link>
         </TokenRow>
-        <TokenRow name="TSD" image="./tsd.png" addToken={addTsdToken}>
+        <TokenRow name="XLSD" image="./tsd.png" addToken={addXlsdToken}>
             <Flex sx={{minWidth: '55px', justifyContent: 'right', paddingRight: '2px'}}>{tsdIsLoading ? '...' : '$' + tsdValue.prettify(2)}</Flex>
             <Link href={`https://info.pangolin.exchange/#/token/${addresses['lusdToken']}`} target="_blank">
                <Icon name="info-circle" style={{marginLeft: "4px"}} size="xs" />
@@ -218,31 +215,31 @@ export const TokenStats: React.FC = () => {
             <Link href={`${explorerUrl}${addresses['lusdToken']}`} target="_blank">
                <Icon name="file-contract" style={{marginLeft: "4px"}} size="xs" />
             </Link>
-            <Link href={`https://app.pangolin.exchange/#/swap?outputCurrency=${addresses['lusdToken']}`} target="_blank">
+            <Link href={`https://viperswap.one/#/swap?outputCurrency=${addresses['lusdToken']}`} target="_blank">
               <Image src="./pangolin.svg" width="15px" height="15px" style={{paddingTop: '8px', marginLeft: '3px'}}/>
             </Link>
-            <Link href={`https://www.traderjoexyz.com/#/trade?outputCurrency=${addresses['lusdToken']}`} target="_blank">
+            <Link href={`https://game.defikingdoms.com/#/marketplace?outputCurrency=${addresses['lusdToken']}`} target="_blank">
                 <Image src="./joe.png" width="15px" height="15px" style={{paddingTop: '8px', marginLeft: '3px'}}/>
             </Link>
         </TokenRow>
-        <TokenRow name="TEDDY" image="./teddy-cash-icon.png" addToken={addTeddyToken}>
-            <Flex sx={{minWidth: '55px', justifyContent: 'right', paddingRight: '2px'}}>{isLoading ? '...' : '$' + teddyValue.prettify(2)}</Flex>
+        <TokenRow name="TEDDY" image="./teddy-cash-icon.png" addToken={addXlongToken}>
+            <Flex sx={{minWidth: '55px', justifyContent: 'right', paddingRight: '2px'}}>{isLoading ? '...' : '$' + xlongValue.prettify(2)}</Flex>
             <Link href="https://www.coingecko.com/en/coins/teddy-cash" target="_blank">
                 <Icon name="info-circle" style={{marginLeft: "4px"}} size="xs" />
             </Link>
             <Link href={`${explorerUrl}${addresses['lqtyToken']}`} target="_blank">
                <Icon name="file-contract" style={{marginLeft: "4px"}} size="xs" />
             </Link>
-            <Link href={`https://app.pangolin.exchange/#/swap?outputCurrency=${addresses['lqtyToken']}`} target="_blank">
+            <Link href={`https://viperswap.one/#/swap?outputCurrency=${addresses['lqtyToken']}`} target="_blank">
                 <Image src="./pangolin.svg" width="15px" height="15px" style={{paddingTop: '8px', marginLeft: '3px'}}/>
             </Link>
-            <Link href={`https://www.traderjoexyz.com/#/trade?outputCurrency=${addresses['lqtyToken']}`} target="_blank">
+            <Link href={`https://game.defikingdoms.com/#/marketplace?outputCurrency=${addresses['lqtyToken']}`} target="_blank">
                 <Image src="./joe.png" width="15px" height="15px" style={{paddingTop: '8px', marginLeft: '3px'}}/>
             </Link>
         </TokenRow>
         <Flex sx={{ paddingBottom: "4px", borderBottom: 1, borderColor: "rgba(0, 0, 0, 0.1)", mb: 1 }}>
           <Flex sx={{ alignItems: "center", justifyContent: "flex-start", flex: 1.2, fontWeight: 200 }}>
-            <Flex> TEDDY Market Cap
+            <Flex> XLONG Market Cap
             </Flex>
           </Flex>
           <Flex sx={{ fontVariantNumeric: "tabular-nums", justifyContent: "flex-end", flex: 0.8,alignItems: "center" }}>
@@ -284,7 +281,7 @@ export const TokenStats: React.FC = () => {
         <Flex sx={{ paddingBottom: "4px", borderBottom: 1, borderColor: "rgba(0, 0, 0, 0.1)", mt: 3, mb: 1 }}>
           <Flex sx={{ alignItems: "center", justifyContent: "flex-start", flex: 1.2, fontWeight: 200 }}>
             <Flex sx={{fontWeight: "bold"}}>TVL Total</Flex>
-            <InfoIcon size="xs" tooltip={<Card variant="tooltip">TVL AVAX collateral + TSD in Stability Pool + TEDDY Staking</Card>} />
+            <InfoIcon size="xs" tooltip={<Card variant="tooltip">TVL ONE collateral + XLSD in Stability Pool + XLONG Staking</Card>} />
           </Flex>
           <Flex sx={{ fontVariantNumeric: "tabular-nums", fontWeight: "bold", justifyContent: "flex-end", flex: 0.8, alignItems: "center" }}>
             {isLoading ? '...' : '$' + tvlTotal.shorten()}
@@ -293,7 +290,7 @@ export const TokenStats: React.FC = () => {
         <Flex sx={{ paddingBottom: "4px", borderBottom: 1, borderColor: "rgba(0, 0, 0, 0.1)", mb: 1 }}>
           <Flex sx={{ alignItems: "center", justifyContent: "flex-start", flex: 1.2, fontWeight: 200 }}>
             <Flex> &middot; in Troves</Flex>
-            <InfoIcon size="xs" tooltip={<Card variant="tooltip">AVAX collateralized in troves.</Card>} />
+            <InfoIcon size="xs" tooltip={<Card variant="tooltip">ONE collateralized in troves.</Card>} />
           </Flex>
           <Flex sx={{ fontVariantNumeric: "tabular-nums", justifyContent: "flex-end", flex: 0.8, alignItems: "center" }}>
             {isLoading ? '...' : '$' + tvlCollateral.shorten()}
@@ -310,11 +307,11 @@ export const TokenStats: React.FC = () => {
         </Flex>
         <Flex sx={{ paddingBottom: "4px", borderBottom: 1, borderColor: "rgba(0, 0, 0, 0.1)", mb: 1 }}>
           <Flex sx={{ alignItems: "center", justifyContent: "flex-start", flex: 1.2, fontWeight: 200 }}>
-            <Flex> &middot; Teddy Staking</Flex>
-            <InfoIcon size="xs" tooltip={<Card variant="tooltip">TEDDY Staking</Card>} />
+            <Flex> &middot; XLONG Staking</Flex>
+            <InfoIcon size="xs" tooltip={<Card variant="tooltip">XLONG Staking</Card>} />
           </Flex>
           <Flex sx={{ fontVariantNumeric: "tabular-nums", justifyContent: "flex-end", flex: 0.8, alignItems: "center" }}>
-            {isLoading ? '...' : '$' + tvlTeddy.shorten()}
+            {isLoading ? '...' : '$' + tvlXlong.shorten()}
           </Flex>
         </Flex>
         </>

@@ -79,7 +79,7 @@ export const ActiveDeposit: React.FC = () => {
             inputId="deposit-gain"
             amount={stabilityDeposit.collateralGain.prettify(4)}
             color={stabilityDeposit.collateralGain.nonZero && "success"}
-            unit="AVAX"
+            unit="ONE"
           />
 
           <Flex sx={{ alignItems: "center" }}>
@@ -93,7 +93,7 @@ export const ActiveDeposit: React.FC = () => {
                 <InfoIcon
                   tooltip={
                     <Card variant="tooltip" sx={{ width: "240px" }}>
-                      Although the TEDDY rewards accrue every minute, the value on the UI only updates
+                      Although the XLONG rewards accrue every minute, the value on the UI only updates
                       when a user transacts with the Stability Pool. Therefore you may receive more
                       rewards than is displayed when you claim or adjust your deposit.
                     </Card>
@@ -113,11 +113,11 @@ export const ActiveDeposit: React.FC = () => {
             &nbsp;Adjust
           </Button>
 
-          <ClaimRewards disabled={!hasGain && !hasReward}>Claim AVAX and TEDDY</ClaimRewards>
+          <ClaimRewards disabled={!hasGain && !hasReward}>Claim ONE and XLONG</ClaimRewards>
         </Flex>
 
         {hasTrove && (
-          <ClaimAndMove disabled={!hasGain}>Claim TEDDY and move AVAX to Trove</ClaimAndMove>
+          <ClaimAndMove disabled={!hasGain}>Claim XLONG and move ONE to Trove</ClaimAndMove>
         )}
       </Box>
 
