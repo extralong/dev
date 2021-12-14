@@ -1,7 +1,7 @@
 const externalAddrs = {
     // https://docs.harmony.one/home/developers/tools/oracles/chainlink
     // Not used with ExtraLongPriceFeed
-    CHAINLINK_ETHUSD_PROXY: "0x4f11696cE92D78165E1F8A9a4192444087a45b64", // changed
+    CHAINLINK_ETHUSD_PROXY: "0xcEe686F89bc0dABAd95AEAAC980aE1d97A075FAD", // changed
 
     // For ExtraLongPriceFeed:
     // Tranquil Finance WONE/USD price oracle
